@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8"/>
+		<!--
+		  Jogo de Forca Normal, ele tem os campos para preencher as letras criar um vetor de 30 posições 
+            para adicionar 30 palavras, sortear uma posição desse vetor	enconder as letras
+		-->
+		<title>Jogo da Forca - Trabalho Projeto Web</title>
+         <script type="text/javascript" src="js/jquery.js" language="javascript"></script>
+		<script>
+            //Biblioteca de palavras
+			
+			var vet2 = new Array();
+				vet2[0] = "Informática"; 	
+				vet2[1] = "Frutas";
+			
+			var vet =  new Array();
+				vet[0] = "Sistemas"; 	
+				vet[1] = "Computador";
+				vet[2] = "Engenharia";
+				vet[3] = "Software";
+				vet[4] = "Hardware";
+				vet[5] = "Setup";
+				vet[6] = "Algortimos";
+				vet[7] = "Pastas";
+				vet[8] = "Arquivos";
+				vet[9] = "Diagramas";
+				vet[10] = "Html";
+				vet[11] = "Variaveis";
+				vet[12] = "Objetos";
+				vet[13] = "Classes";
+				vet[14] = "Mouse";
+				vet[15] = "Fluxograma";
+				vet[16] = "Java";
+				vet[17] = "PHP";
+				vet[18] = "Monitor";
+				vet[19] = "Dados";
+				vet[20] = "Conhecimento";
+				vet[21] = "Gabinete";
+				vet[22] = "Analista";
+				vet[23] = "Desenvolvedor";
+				vet[24] = "Gerenciamento";
+				vet[25] = "Redes";
+				vet[26] = "Teclado";
+				vet[27] = "Projetos";
+				vet[28] = "Notebook";
+				vet[29] = "Internet";
+				vet[30] = "Gambiarra";
+				vet[31] = "Goiaba";
+				vet[32] = "Abacaxi";
+				vet[33] = "Morango";
+				vet[34] = "Amora";
+				vet[35] = "Pessego";
+				vet[36] = "Uva";
+				vet[37] = "Laranja";
+				vet[38] = "Banana";
+				vet[39] = "Limao";
+				vet[40] = "Abacate";
+				vet[41] = "Acerola";
+				vet[42] = "Cacau";
+				vet[43] = "Caqui";
+				vet[44] = "Carambola";
+				vet[45] = "Cereja";
+				vet[46] = "Coco";
+				vet[47] = "Framboesa";
+				vet[48] = "Jabuticaba";
+				vet[49] = "Kiwi";
+				vet[50] = "Manga";
+				vet[51] = "Maracuja";
+				vet[52] = "Mamao";
+				vet[53] = "Melancia";
+				vet[54] = "Melao";
+				vet[55] = "Pera";
+				vet[56] = "Pitanga";
+				vet[57] = "Tangerina";
+				vet[58] = "Maca";
+				vet[59] = "Jaca";
+				vet[60] = "Groselha";
+
+			var palavra = new Array();
+			var dica = new Array();	
+
+			function exibir() {
+                //Inicia botões
+                habilitarBotao();
+				//Randomiza posições
+				var r = Math.floor(Math.random() * 61);			
+				
+				// id em cada campo, máximo de elemento no input = 1, palavra[i] = cada letra da palavra randomizada
+				for (var i = 0; i < vet[r].length; i++) {
+					$('#campo').append('<input type=\"text\" id=\"'+i+'\" maxlength=\"1\" readOnly/>');
+					palavra[i] = vet[r].charAt(i); 			
+				}
+				// Faz a verificação de qual tipo é a palavra 
+				if(r >= 0 && r<=30){
+					dica = vet2[0];
+					document.getElementById("p_texto").innerHTML = dica;
+				}
+				if(r >= 31 && r<=60){
+					dica = vet2[1];
+					document.getElementById("p_texto").innerHTML = dica;
+				}	
+
+			}	
+            
+			function comparar(idbutton) {
+                //recebe o id do botão acionado e recebe seu name
+				var tentativa = document.getElementById('B'+idbutton).name;
+                //recebe e converte para minúscula
+                var tentativa = tentativa.toLowerCase();
+                var acerto = 0;
+                var adivinhou = 0;
+                var cor = 'black';
+
+                for (var i = 0; i < palavra.length; i++) {
+                    //compara com a tentativa
+                    if(tentativa.localeCompare(palavra[i].toLowerCase()) == 0) {
+                        $('#'+i+'').val(palavra[i]);
+                        acerto++;
+                        desabilitaBotao(idbutton, cor);
+                    }
+                    //soma a quantidade de acertos
+                    var aux = $('#'+i+'').val();
+                    if(aux.length == 1){												
+                        adivinhou++;
+                    }
+                };
+                //verifica se ele adivinho a palavra a partir da variável adivinhou
+                if(palavra.length == adivinhou) {
+					var ganhou = new Audio('ganhou.mp3');
+					ganhou.addEventListener('canplaythrough', function() {
+					  ganhou.play();
+					});
+					document.getElementById('forca').src="f08.png";
+                    alert("Parabéns você acertou a palavra!");
+					
+                    //refresh na página
+                    location.reload();
+                }
+                //caso ele erre troca a imagem da forca
+                if(acerto == 0) {
+                    cor = 'red';
+                    desabilitaBotao(idbutton, cor);
+                    var imagemErro = $('#forca').attr("src");
+                    if(imagemErro.localeCompare("f01.png") == 0){
+                       document.getElementById('forca').src="f02.png";
+                    }
+                    if(imagemErro.localeCompare("f02.png") == 0){
+                       document.getElementById('forca').src="f03.png";
+                    }
+                    if(imagemErro.localeCompare("f03.png") == 0){
+                       document.getElementById('forca').src="f04.png";
+                    }
+                    if(imagemErro.localeCompare("f04.png") == 0){
+                       document.getElementById('forca').src="f05.png";
+                    }
+                    if(imagemErro.localeCompare("f05.png") == 0){
+                       document.getElementById('forca').src="f06.png";
+                    }
+                    if(imagemErro.localeCompare("f06.png") == 0){
+                       document.getElementById('forca').src="f07.png";
+                       //exibe as letras restantes caso ele usou todas as tentativas
+                       for (var i = 0; i < palavra.length; i++) {
+                           $('#'+i+'').val(palavra[i]);
+                       };
+					   var perdeu = new Audio('perdeu.mp3');
+					   perdeu.addEventListener('canplaythrough', function() {
+						  perdeu.play();
+						});
+                       alert("Morreu!");
+                       location.reload(); 
+                    }
+                }					
+            }
+
+            //Desabilita tanto acertos ou erros
+            function desabilitaBotao(idbutton, cor){ 
+                $('#B'+idbutton).attr('disabled', 'true');
+                document.getElementById('B'+idbutton).style.background = cor;
+            }
+            
+            //Habilitar Todos botões
+            function habilitarBotao(){
+                for(var i = 1; i < 27 ; i++){
+                    $('#B'+i).removeAttr('disabled');
+                }
+            }
+            
+			</script>
+   		<style>
+   			body, button {
+   				text-align: center;
+   				font-size: 25pt;
+   			}
+
+   			input {
+   				width: 70px;
+   				text-align: center;
+   				font-size: 25pt;
+                font-family: Tempus Sans ITC; 
+   			}
+               
+            button {  
+               width: 60px;  
+               height: 60px;  
+               font-family: Tempus Sans ITC;  
+               background-color: white;  
+            }
+            
+            table, td {
+               border: "1px";
+               background-color: black;
+               margin-left: auto;
+               margin-right: auto;
+            } 
+            img {
+               height: 50%;
+               width: 60%;
+
+            }
+   		</style>
+	</head>
+	<body onload="exibir();">		
+      <h3>Jogo da Forca</h3>
+		<strong>Dica: <p id="p_texto"></p> </strong>
+		<figure> 
+          <img src="f01.png" alt="Forca" id="forca">
+      </figure>
+      <div id="campo">         
+      </div>
+      <br/>        
+         <table>
+            <tr>
+               <td><button type="button" name="A" id="B1" onclick="comparar(1);">A</button></td>
+               <td><button type="button" name="B" id="B2" onclick="comparar(2);">B</button></td>
+               <td><button type="button" name="C" id="B3" onclick="comparar(3);">C</button></td>
+               <td><button type="button" name="D" id="B4" onclick="comparar(4);">D</button></td>
+               <td><button type="button" name="E" id="B5" onclick="comparar(5);">E</button></td>
+               <td><button type="button" name="F" id="B6" onclick="comparar(6);">F</button></td>
+               <td><button type="button" name="G" id="B7" onclick="comparar(7);">G</button></td>
+               <td><button type="button" name="H" id="B8" onclick="comparar(8);">H</button></td>
+               <td><button type="button" name="I" id="B9" onclick="comparar(9);">I</button></td>
+               <td><button type="button" name="J" id="B10" onclick="comparar(10);">J</button></td>
+               <td><button type="button" name="K" id="B11" onclick="comparar(11);">K</button></td>
+               <td><button type="button" name="L" id="B12" onclick="comparar(12);">L</button></td>
+               <td><button type="button" name="M" id="B13" onclick="comparar(13);">M</button></td>
+            </tr>
+            <tr>
+               <td><button type="button" name="N" id="B14" onclick="comparar(14);">N</button></td>
+               <td><button type="button" name="O" id="B15" onclick="comparar(15);">O</button></td>
+               <td><button type="button" name="P" id="B16" onclick="comparar(16);">P</button></td>
+               <td><button type="button" name="Q" id="B17" onclick="comparar(17);">Q</button></td>
+               <td><button type="button" name="R" id="B18" onclick="comparar(18);">R</button></td>
+               <td><button type="button" name="S" id="B19" onclick="comparar(19);">S</button></td>
+               <td><button type="button" name="T" id="B20" onclick="comparar(20);">T</button></td>
+               <td><button type="button" name="U" id="B21" onclick="comparar(21);">U</button></td>
+               <td><button type="button" name="V" id="B22" onclick="comparar(22);">V</button></td>
+               <td><button type="button" name="W" id="B23" onclick="comparar(23);">W</button></td>
+               <td><button type="button" name="X" id="B24" onclick="comparar(24);">X</button></td>
+               <td><button type="button" name="Y" id="B25" onclick="comparar(25);">Y</button></td>
+               <td><button type="button" name="Z" id="B26" onclick="comparar(26);">Z</button></td>
+            </tr>
+         </table>
+		<small>By CarlosEVR</small>
+	</body>
+</html>
